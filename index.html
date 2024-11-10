@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz des Codes de Fruits et Légumes</title>
+    <style>
+        /* CSS pour styliser la page */
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        #question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        #answer {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            width: 80%;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+        #feedback {
+            margin-top: 20px;
+            font-size: 1em;
+        }
+        #score {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz des Codes</h1>
+        <p id="question">Chargement...</p>
+        <input type="text" id="answer" placeholder="Entrez le code" autocomplete="off" onkeydown="if(event.key === 'Enter') checkAnswer()">
+        <button onclick="checkAnswer()">Soumettre</button>
+        <p id="feedback"></p>
+        <p id="score">Score : 0</p>
+    </div>
+    <script>
+        const codes = {
+            "Fraises (U)": "100", "Bleuets (U)": "101", "Framboises (U)": "102", 
+            "Mûres (U)": "103", "Avocat (U)": "104", "Banane (KG)": "105", 
+            "Ananas entier (U)": "106", "Mangue MINI (U)": "198", "Mangue Jaune (U)": "109",
+            "Kiwi (U)": "110", "Kiwi doré (U)": "111", "Pomme Granny Smith (KG)": "115",
+            "Pomme Cripps Pink (KG)": "117", "Pomme QC H. Crisp (KG)": "119",
+            "Poire Bartlett (U)": "121", "Poire Bosc (U)": "122", "Citron (U)": "130",
+            "Lime (U)": "131", "Orange Cara Cara (U)": "140", "Clémentines en vrac (KG)": "142",
+            "Clémentine (boîte)": "143", "Poire Abatte (KG)": "125", "Poire Cactus (U)": "128",
+            "Pamplemousse (U)": "133", "Papaye (KG)": "137", "Grenade (U)": "188",
+            "Tomate cerise (KG)": "52", "Céleri (U)": "7", "Brocoli (U)": "9",
+            "Poivron vert (KG)": "40", "Poivron rouge (KG)": "42", "Poivron jaune (KG)": "43",
+            "Jalapeños (U)": "44", "Patate blanche (KG)": "45", "Patate douce (KG)": "48",
+            "Oignon rouge (KG)": "51", "Oignon jaune (KG)": "54", "Carotte (KG)": "66",
+            "Basilic (U)": "59", "Menthe (U)": "65", "Tomate raisin (KG)": "73",
+            "Tomate vigne (KG)": "71", "Gingembre BIO (KG)": "9079", "Rhubarbe (U)": "87",
+            "Épis de maïs (U)": "88", "Haricots verts (KG)": "94", "Café en vrac": "9099"
+        };
+        
+        let items = Object.entries(codes);
+        let score = 0;
+        let currentQuestion;
+
+        function loadQuestion() {
+            if (items.length === 0) {
+                document.getElementById("question").innerText = "Quiz terminé !";
+                document.getElementById("feedback").innerText = `Votre score final est de ${score}.`;
+                document.getElementById("answer").style.display = "none";
+                return;
+            }
+            const randomIndex = Math.floor(Math.random() * items.length);
+            currentQuestion = items[randomIndex];
+            document.getElementById("question").innerText = `Quel est le code pour '${currentQuestion[0]}' ?`;
+            document.getElementById("answer").value = "";
+            document.getElementById("answer").focus();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim();
+            const correctAnswer = currentQuestion[1];
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById("feedback").innerText = "Correct ! 😊";
+                score++;
+            } else {
+                document.getElementById("feedback").innerText = `Faux ! La bonne réponse était : ${correctAnswer}. 😢`;
+            }
+            document.getElementById("score").innerText = `Score : ${score}`;
+            items = items.filter(item => item !== currentQuestion);
+            setTimeout(loadQuestion, 1500);
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
